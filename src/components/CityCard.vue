@@ -7,7 +7,7 @@
 
         <div class="flex flex-col gap-2">
             <p class="text-3xl self-end">
-                {{ Math.round(city.weather.main.temp) }}&deg;
+                {{ Math.round((city.weather.main.temp  - 32 )* 5/9 ) }}&deg;
             </p>
                 <div class="flex gap-2">
                     <span class="text-xs ">
