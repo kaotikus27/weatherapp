@@ -32,11 +32,11 @@
                 }}
             </p>
             <p class="text-8xl mb-8">
-                {{ Math.round(weatherData.current.temp) }}&deg;
+                {{ Math.round((weatherData.current.temp - 32 )* 5/9) }}&deg;
             </p>
             <p>
                 Feels like
-                {{ Math.round(weatherData.current.feels_like) }}&deg;
+                {{ Math.round((weatherData.current.feels_like- 32 )* 5/9 ) }}&deg;
             </p>
 
             <p class="capitalize">
@@ -71,7 +71,7 @@
                     " alt="" />
 
                     <p class="text-xl">
-                        {{ Math.round(hourData.temp) }}&deg;
+                        {{ Math.round((hourData.temp - 32 )* 5/9) }}&deg;
                     </p>
                     </div>
                 </div>
@@ -120,13 +120,15 @@ import axios from 'axios';
 import { useRouter, useRoute } from 'vue-router';
 
 const route = useRoute();
+
+
 const getWeatherData = async () => {
     try {
         const weatherData = await axios.get(
             `https://api.openweathermap.org/data/2.5/onecall?lat=${route.query.lat}&lon=${route.query.lng}&exclude={part}&appid=7efa332cf48aeb9d2d391a51027f1a71&units=imperial`
         );
         //calculating current date and time
-        const localOffset = new Date().getTimezoneOffset() * 6000;
+        const localOffset = new Date().getTimezoneOffset() * 60000;
         const utc = weatherData.data.current.dt * 1000 + localOffset;
         weatherData.data.currentTime = utc + 1000 * weatherData.data.timezone_offset;
 
@@ -136,6 +138,7 @@ const getWeatherData = async () => {
             hour.currentTime = utc + 1000 * weatherData.data.timezone_offset;
         });
         await new Promise((res) => setTimeout(res,1000))
+        console.log(weatherData.data, "current weather")
         return weatherData.data;
     } catch (err) {
         console.log(err);
