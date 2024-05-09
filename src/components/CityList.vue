@@ -30,6 +30,9 @@ import { useRouter } from 'vue-router';
             })
 
         const weatherData = await Promise.all(requests)
+        
+        /* flicker delay hehe */
+        await new Promise((res) => setTimeout(res,1000))
 
         weatherData.forEach((value, index) => {
             savedCities.value[index].weather = value.data;
@@ -43,7 +46,7 @@ import { useRouter } from 'vue-router';
         router.push({
             name:'cityView',
             params:{state:city.state, city:city.city},
-            query:{lat: city.coords.lat, lng: city.coords.lng},
+            query:{id: city.id , lat: city.coords.lat, lng: city.coords.lng},
         });
     };
 
